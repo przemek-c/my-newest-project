@@ -1,5 +1,5 @@
+// test.tsx
 import React, { useEffect, useState } from 'react';
-import Papa from 'papaparse';
 
 interface DataRow {
     [key: string]: string;
@@ -9,11 +9,23 @@ const DataTable: React.FC = () => {
     const [data, setData] = useState<DataRow[]>([]);
 
     useEffect(() => {
-        fetch('/path/to/output.csv')
+        fetch('/python-scripts/output.csv') // Fetch the CSV file from the server
+        
             .then(response => response.text())
             .then(csvText => {
-                const parsedData = Papa.parse<DataRow>(csvText, { header: true });
-                setData(parsedData.data);
+                const rows = csvText.split('\n');
+                const headers = rows[0].split(',');
+
+                const parsedData = rows.slice(1).map(row => {
+                    const values = row.split(',');
+                    const dataRow: DataRow = {};
+                    headers.forEach((header, index) => {
+                        dataRow[header] = values[index];
+                    });
+                    return dataRow;
+                });
+
+                setData(parsedData);
             });
     }, []);
 
@@ -24,7 +36,9 @@ const DataTable: React.FC = () => {
     const headers = Object.keys(data[0]);
 
     return (
-        <table>
+        <div>
+            <h1>CSV Data 1 ebe </h1>
+            <table>
             <thead>
                 <tr>
                     {headers.map(header => (
@@ -42,6 +56,7 @@ const DataTable: React.FC = () => {
                 ))}
             </tbody>
         </table>
+        </div>
     );
 };
 
