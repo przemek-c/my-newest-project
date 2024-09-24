@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import Papa from 'papaparse';
+import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import DataTable from './test4'; // Import the DataTable component
 
 function App() {
   return (
@@ -19,9 +19,12 @@ function App() {
         >
           Learn React
         </a>
-        
-
       </header>
+      
+      <main>
+        <DataTable /> {/* Use the DataTable component */}
+      </main>
+
     </div>
   );
 }
